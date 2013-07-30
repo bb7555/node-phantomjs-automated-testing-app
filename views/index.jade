@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    h1= title
+    #urls
+        - each url in urls
+          div.url
+            div.created_at= url.created_at
+            div.path= url.path 
+            div.host= url.host
+            form( method="post", action="/url/:id/delete", class="actionConfirm") 
+                    input(name="_id", type="hidden", value=url._id) 
+                    input(id="delete", value="Delete", type="submit")
+            form( method="get", action="/url/:id/edit") 
+                    input(name="_id", type="hidden", value=url._id.toHexString()) 
+                    input(id="edit", value="Edit", type="submit")
+
+    .block                
+        a(href="/url/new")!= "Add New URL to Test"
+    .block
+        a(href="/employee/list")!= "Choose a User Profile To Run The App"

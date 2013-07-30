@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    h1= title
+    div.newurl
+        form( method="post")
+            div
+                div
+                    span.label Path :
+                    input(type="text", name="path", id="editURLPath")
+                div
+                    span.label Host :
+                    input(type="text", name="host", id="editURLHost")
+                div#editURLSubmit
+                    input(type="submit", value="Save")
+        a(href="/")!= "Back to URL to Test List"
