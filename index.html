@@ -1,0 +1,83 @@
+<html>
+<head>
+<style>
+    .clear{clear:both;}
+    .screen {
+
+    }
+    .screen img{
+    }
+</style>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript" src="js/noty/jquery.noty.js"></script>
+<script type="text/javascript" src="js/noty/layouts/top.js"></script>
+<script type="text/javascript" src="js/noty/layouts/topLeft.js"></script>
+<script type="text/javascript" src="js/noty/layouts/topRight.js"></script>
+<script type="text/javascript" src="js/noty/themes/default.js"></script>
+
+
+<script>
+	// Helper for require module
+	var exports = {}
+</script>
+<script type="text/javascript" src="config.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+        var $ScreenCompares = $('#ScreenCompares')
+            , getScreen = function(test) {
+                
+                $screen = $('<div class="screen"></div>')
+                $screen.html(getImg(test,false) + getImg(test,true) + '<div class="clear"></div>')
+                return $screen
+            }
+            , getImg = function(test,local) {
+                var filename = exports.getFileName(test,local)
+                    , des = ((local) ? 'Local: ' : 'Production: ') + filename
+                return '<img class="'+((local)?'local':'production')+'" src="'+filename+'.png" alt="'+des+'"/>'
+            }
+
+        for(var i=0,l=exports.tests.length,test; i<l; i++)  {
+            test = exports.tests[i]
+            $ScreenCompares.append(getScreen(test))
+        }
+
+        window.setTimeout(function() {
+            $('.screen').each(function() {
+                var $$ = $(this)
+                    , h = $$.height()
+                $$.css({
+                    height:h+'px'
+                    , position: 'relative'
+                })
+                $$.find('img').each(function() {
+                    var $$$ = $(this)
+                    $$$.css({
+                        position:'absolute'
+                        , top:'0'
+                        , left:'0'
+                    })
+                    $$$.click(function() {
+                        var $s = $(this).siblings('img')
+                        $(this).fadeOut('slow')
+                        $s.fadeIn('slow');
+
+                        var n = noty({text: $s.attr('alt'),timeout:3000});
+                    })
+                })
+            })
+        },5000)
+    })
+
+
+</script>
+</head>
+<body>
+
+
+<div id="ScreenCompares"></div>
+
+</body>
+</html>
