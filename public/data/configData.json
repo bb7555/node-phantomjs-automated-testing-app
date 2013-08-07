@@ -1,3 +1,1 @@
-{ "host" : "www.myfoxphilly.com", "path" : "/category/233430/entertainment", "created_at" : { "$date" : 1375199393295 }, "_id" : { "$oid" : "51f7e0a1dc12a13510000002" } }
-{ "_id" : { "$oid" : "51f9322668ee1e660c000001" }, "host" : "www.news9.com", "path" : "/category/112032/news" }
-{ "host" : "www.wric.com", "path" : "/category/1120/8news", "created_at" : { "$date" : 1375800325820 }, "_id" : { "$oid" : "52010c05282cde2f0f000001" } }
+{ "path" : "/category/112043/sports", "host" : "www.newson6.com", "_id" : { "$oid" : "5202929709464e3717000001" }, "postdate" : { "$date" : 1375900311554 }, "__v" : 0 }

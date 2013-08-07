@@ -4,14 +4,14 @@ var express = require('express')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
-  , EmployeeProvider = require('./employeeprovider').EmployeeProvider
-  , RunPhantom = require('./runPhantom').RunPhantom
-  , UrlProvider = require('./urlprovider').UrlProvider
-  , ScreenshotProvider = require('./screenshotprovider').ScreenshotProvider
-  , ImageProvider = require('./imageprovider').ImageProvider;
+  , mongoose = require('mongoose')
+  , RunPhantom = require('./runPhantom').RunPhantom;
 
 /////////////Instantiate the framework object
 var app = express();
+
+//connect to MongoDB after app initializes
+mongoose.connect('mongodb://localhost/automated_testing');
 
 ///////////////////////// all environments
 app.set('port', process.env.PORT || 3000);
@@ -30,138 +30,32 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-///////////////////////Instantiate App Data/Model Objects
-var employeeProvider = new EmployeeProvider('localhost', 27017);
-var urlProvider = new UrlProvider('localhost', 27017);
+//instantiate controllers with their models
+var urlController = require('./controllers/url.js');
+var userController = require('./controllers/user.js');
 var runPhantom = new RunPhantom();
-var screenshotProvider = new ScreenshotProvider('localhost', 27017);
-var imageProvider = new ImageProvider('localhost', 27017);
 
 /////////////////////////////ROUTES FOR APP
 
+/////////////URL Routes
+app.get('/url/index', urlController.list);
+app.get('/url/create', urlController.create);
+app.post('/url/create', urlController.save);
+app.get('/url/update', urlController.single);
+app.post('/url/update', urlController.update);
+app.post('/url/delete', urlController.delete);
 
-////////////URL CRUD
-//index page, display all URLs to be tested
-app.get('/', function(req, res){
-	urlProvider.findAll(function(error, emps){
-		res.render('index', {
-			title: 'URLs to be tested by Automated Testing App',
-			urls: emps
-		});
-	});
-});
+/////////////User Routes
+app.get('/user/index', userController.list);
+app.get('/user/create', userController.create);
+app.post('/user/create', userController.save);
+app.get('/user/update', userController.single);
+app.post('/user/update', userController.update);
+app.post('/user/delete', userController.delete);
 
-//Save new URL entry
-app.post('/url/new', function(req, res){
-	urlProvider.save({
-		host: req.param('host'),
-		path: req.param('path')
-	}, function(error, docs){
-		res.redirect('/')
-	});
-	urlProvider.updateJSON();
-});
-
-//display create new URL for
-app.get('/url/new', function(req, res){
-	res.render('url_new', {
-		title: 'Create New URL to be Tested'
-	});
-});
-
-//show individual url in DB
-app.get('/url/:id/edit', function(req, res){
-	urlProvider.findById(req.param('_id'), function(error, url){
-		res.render('url_edit',
-			{
-				url: url
-			});
-	});
-});
-
-//save URL update
-app.post('/url/:id/edit', function(req, res){
-	urlProvider.update(req.param('_id'),{
-		host: req.param('host'),
-		path: req.param('path')
-	}, function(error, doc){
-		res.redirect('/')
-	});
-	urlProvider.updateJSON();
-});
-
-//delete URL record
-app.post('/url/:id/delete', function(req, res){
-	urlProvider.delete(req.param('_id'), function(error, docs){
-		res.redirect('/')
-	});
-	urlProvider.updateJSON();
-});
-
-////////////////APP USERS CRUD
-//Display all app users
-app.get('/employee/list', function(req, res){
-	employeeProvider.findAll(function(error, emps){
-		res.render('employee_index', {
-			title: 'Users of The Automated Testing App',
-			employees: emps
-		});
-	});
-});
-
-//Save new user entry
-app.post('/employee/new', function(req, res) {
-	employeeProvider.save({
-		title: req.param('title'),
-		name: req.param('name')
-	}, function(error, docs) {
-		res.redirect('/employee/list')
-	});
-});
-
-//display create new user form and view
-app.get('/employee/new', function(req, res) {
-	res.render('employee_new', {
-		title: 'Create New App User'
-	});
-});
-
-//show individual user
-app.get('/employee/:id/edit', function(req, res) {
-	employeeProvider.findById(req.param('_id'), function(error, employee) {
-		res.render('employee_edit',
-		{
-			employee: employee
-		});
-	});
-});
-
-//save updates to user
-app.post('/employee/:id/edit', function(req, res) {
-	employeeProvider.update(req.param('_id'),{
-		title: req.param('title'),
-		name: req.param('name')
-	}, function(error, docs) {
-		res.redirect('/employee/list')
-	});
-});
-
-//delete an app user
-app.post('/employee/:id/delete', function(req, res) {
-	employeeProvider.delete(req.param('_id'), function(error, docs) {
-		res.redirect('/employee/list')
-	});
-});
-
-//////////////////PHANTOMJS CONTROLLER
-//Run Automated Testing App
+////////////Run Automated Testing App
 app.get('/automated/testing', function(req, res){
 	
-	screenshotProvider.save({
-		user_id: req.param('user_id')
-	}, function(error, docs) {
-		//create screen shot record in DB
-	});
 
 	fs = require('fs');
 	var dataObj;
@@ -170,7 +64,7 @@ app.get('/automated/testing', function(req, res){
 		    return console.log(err);
 		  }
 		  
-		  //parse the mongo db dump
+		    //parse the mongo db dump
 			data = "["+data+"]";
 			data = data.replace(/(\r\n|\n|\r)/gm,",");
 			data = data.replace(",]", "]");
@@ -181,9 +75,8 @@ app.get('/automated/testing', function(req, res){
 			dataObj = JSON.parse(firstParseData);	
 
 			getFileName = function(test,local) {
-			return 'public/images/results/' + test.host.replace(/\./g,'-').replace(/\:[0-9]+/,'').replace('-com','').replace('www-','') + test.path.replace(/\//g,'-').replace(/\?clienttype=/g, "clienttype") + ((local) ? '-locl' : '-prod')
+			return 'images/results/' + test.host.replace(/\./g,'-').replace(/\:[0-9]+/,'').replace('-com','').replace('www-','') + test.path.replace(/\//g,'-').replace(/\?clienttype=/g, "clienttype") + ((local) ? '-locl' : '-prod')
 			}
-
 	
 			var test = {}
 			, i = 0;

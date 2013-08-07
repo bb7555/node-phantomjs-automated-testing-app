@@ -1,0 +1,20 @@
+extends layout
+
+block content
+    h1= title
+    #users
+        - each user in users
+          div.user
+            div.created_at= user.created_at
+            div.title= user.title 
+            div.name= user.name
+                form( method="post", action="/user/delete", class="actionConfirm") 
+                    input(name="_id", type="hidden", value=user._id) 
+                    input(id="delete", value="Delete", type="submit")
+                form( method="get", action="/user/update") 
+                    input(name="_id", type="hidden", value=user._id.toHexString()) 
+                    input(id="edit", value="Edit", type="submit")
+                form( method="get", action="/automated/testing", class="actionConfirm") 
+                    input(name="user_id", type="hidden", value=user._id) 
+                    input(id="edit", value="Run Test As This User", type="submit")
+        a(href="/user/create")!= "Add New App User"

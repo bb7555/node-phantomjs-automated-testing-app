@@ -1,14 +1,17 @@
 {
-  "name": "application-name",
+  "name": "WorldNow Automated Testing App",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node app.js"
   },
+  "repository": "https://github.com/bb7555/node-phantomjs-automated-testing-app.git",
+  "author": "Cliff Barnes",
   "dependencies": {
     "express": "3.3.4",
     "jade": "*",
     "stylus": "*",
-    "mongodb": ">= 0.9.6-7"
+    "mongodb": ">= 0.9.6-7",
+    "mongoose": "3.6.15"
   }
 }
