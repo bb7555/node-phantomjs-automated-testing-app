@@ -34,6 +34,7 @@ if ('development' == app.get('env')) {
 var urlController = require('./controllers/url.js');
 var userController = require('./controllers/user.js');
 var runPhantom = new RunPhantom();
+var screenshotController = require('./controllers/screenshot.js');
 
 /////////////////////////////ROUTES FOR APP
 
@@ -53,9 +54,15 @@ app.get('/user/update', userController.single);
 app.post('/user/update', userController.update);
 app.post('/user/delete', userController.delete);
 
+/////////////ScreenShot Routes
+app.get('/screenshots/index', screenshotController.list);
+
+
 ////////////Run Automated Testing App
 app.get('/automated/testing', function(req, res){
 	
+	//save the screen shot record
+	screenshotController.save(req, res);
 
 	fs = require('fs');
 	var dataObj;

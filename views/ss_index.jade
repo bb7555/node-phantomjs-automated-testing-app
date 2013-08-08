@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    h1= title
+    #sshots
+        - each sshot in sshots
+          div.sshot
+            div.created_at= sshot.postdate
+            div.path= sshot.user_id.name 
+            
+            
+
+    .block                
+        a(href="/")!= "Return to App Index"
+   
+    
