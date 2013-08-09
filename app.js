@@ -35,6 +35,7 @@ var urlController = require('./controllers/url.js');
 var userController = require('./controllers/user.js');
 var runPhantom = new RunPhantom();
 var screenshotController = require('./controllers/screenshot.js');
+var imageController = require('./controllers/image.js');
 
 /////////////////////////////ROUTES FOR APP
 
@@ -58,49 +59,16 @@ app.post('/user/delete', userController.delete);
 app.get('/screenshots/index', screenshotController.list);
 
 
+////////////Screen Shot Images Routes
+app.get('/screenshots/view', imageController.list);
+
 ////////////Run Automated Testing App
 app.get('/automated/testing', function(req, res){
 	
-	//save the screen shot record
-	screenshotController.save(req, res);
-
-	fs = require('fs');
-	var dataObj;
-	fs.readFile('public/data/configData.json', 'utf8', function (err,data) {
-		if (err) {
-		    return console.log(err);
-		  }
-		  
-		    //parse the mongo db dump
-			data = "["+data+"]";
-			data = data.replace(/(\r\n|\n|\r)/gm,",");
-			data = data.replace(",]", "]");
-
-			//convert the string to JSON and then an object
-			var stringifyData = JSON.stringify(data);
-			var firstParseData =  JSON.parse(stringifyData);
-			dataObj = JSON.parse(firstParseData);	
-
-			getFileName = function(test,local) {
-			return 'images/results/' + test.host.replace(/\./g,'-').replace(/\:[0-9]+/,'').replace('-com','').replace('www-','') + test.path.replace(/\//g,'-').replace(/\?clienttype=/g, "clienttype") + ((local) ? '-locl' : '-prod')
-			}
 	
-			var test = {}
-			, i = 0;
-			makeCall = function(i,local) {
-				if ( i < dataObj.length ) {
-				test = dataObj[i];
-				console.log(getFileName(test,local) + '.png');
-					if(local) {
-					makeCall(i+1);
-					} else {
-					makeCall(i,true);
-					}
-				}
-			};
-			makeCall(0);
-	});
-
+	//save the screen shot record and add all the images to images db
+	screenshotController.save(req, res);
+	
 	runPhantom.connectTerminal();
 	res.render('automated_testing', {
 		title: 'Started Automated Testing'

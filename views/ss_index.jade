@@ -6,7 +6,9 @@ block content
         - each sshot in sshots
           div.sshot
             div.created_at= sshot.postdate
-            div.path= sshot.user_id.name 
+            div.path= sshot.user_id.name
+            div.view_ss
+               a(href="/screenshots/view?_id="+sshot._id+"")!= "View Screen Shot Batch" 
             
             
 

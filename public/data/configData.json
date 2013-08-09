@@ -1,1 +1,4 @@
 { "path" : "/category/112043/sports", "host" : "www.newson6.com", "_id" : { "$oid" : "5202929709464e3717000001" }, "postdate" : { "$date" : 1375900311554 }, "__v" : 0 }
+{ "path" : "/story/23093868/flooding-closes-roads-in-deer-creek-area", "host" : "www.news9.com", "_id" : { "$oid" : "5205479f2b7d52dc51000001" }, "postdate" : { "$date" : 1376077727577 }, "__v" : 0 }
+{ "path" : "/story/23094631/police-resume-search-for-missing-7-month-old-baby", "host" : "www.myfoxphilly.com", "_id" : { "$oid" : "520547e22b7d52dc51000002" }, "postdate" : { "$date" : 1376077794596 }, "__v" : 0 }
+{ "path" : "/category/1121/sports", "host" : "www.wric.com/", "_id" : { "$oid" : "520548142b7d52dc51000003" }, "postdate" : { "$date" : 1376077844067 }, "__v" : 0 }

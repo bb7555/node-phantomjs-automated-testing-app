@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    h1= title
+    #sshots
+        - each image in images
+          div.image
+           
+            div.view_ss
+               img(src="/"+image.filename+"")
+            
+            
+
+    .block                
+        a(href="/")!= "Return to App Index"
+   
+    
