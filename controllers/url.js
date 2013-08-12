@@ -48,11 +48,11 @@ exports.update = function(req, res){
 }
 
 exports.delete = function(req, res){
-	URL.remove(function(err){
-		URL.findById(req.body._id, function(){
+	URL.remove({_id: req.body._id},function(err){
+		
 			updateJSON();
 			res.redirect('/url/index');
-		});
+		
 	});
 }
 

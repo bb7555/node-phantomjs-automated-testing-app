@@ -38,6 +38,10 @@ var screenshotController = require('./controllers/screenshot.js');
 var imageController = require('./controllers/image.js');
 
 /////////////////////////////ROUTES FOR APP
+app.get('/', function(req, res){
+  res.render('index');
+});
+
 
 /////////////URL Routes
 app.get('/url/index', urlController.list);
@@ -79,6 +83,18 @@ app.get('/automated/testing', function(req, res){
 app.get('/automated/index', function(req, res){
 	res.render('automated_index');
 });
+
+///////////Authentication System
+var passport = require('passport');
+
+app.post('/login',
+  passport.authenticate('local'),
+  function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    res.redirect('/users/' + req.user.username);
+  });
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

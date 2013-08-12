@@ -1,22 +1,13 @@
 extends layout
 
 block content
-    h1= title
-    #urls
-        - each url in urls
-          div.url
-            div.created_at= url.created_at
-            div.path= url.path 
-            div.host= url.host
-            form( method="post", action="/url/:id/delete", class="actionConfirm") 
-                    input(name="_id", type="hidden", value=url._id) 
-                    input(id="delete", value="Delete", type="submit")
-            form( method="get", action="/url/:id/edit") 
-                    input(name="_id", type="hidden", value=url._id.toHexString()) 
-                    input(id="edit", value="Edit", type="submit")
+    h1= 'Welcome to the WorldNow Automated Testing'
+        
 
     .block                
-        a(href="/url/create")!= "Add New URL to Test"
+        a(href="/automated/testing?_id=5208fac83c91ee912b000001")!= "Test as on the QA Group Account"
     .block
-        a(href="/employee/list")!= "Choose a User Profile To Run The App"
+        a(href="/automated/testing?_id=5208fae33c91ee912b000002")!= "Test as the Bamboo or Git User Agent"
+    .block
+        a(href="/screenshots/index")!= "View Screen shot batches"
     

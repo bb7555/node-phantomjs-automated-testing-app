@@ -38,9 +38,9 @@ exports.update = function(req, res){
 }
 
 exports.delete = function(req, res){
-	User.remove(function(err){
-		User.findById(req.body._id, function(){
+	User.remove({_id: req.body._id}, function(err){
+		
 			res.redirect('/user/index');
-		});
+		
 	});
 }
